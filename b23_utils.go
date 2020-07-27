@@ -4,8 +4,11 @@
 package b23utils
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"math"
+	"net/http"
 	"reflect"
 	"strconv"
 	"strings"
@@ -24,6 +27,50 @@ var add int64 = 8728348608
 var offset int64 = 58
 
 var tempArr = [6]int64{}
+
+// BilibiliJSON 自动生成: http://json2struct.mervine.net/
+type BilibiliJSON struct {
+	Code int64 `json:"code"`
+	Data struct {
+		Aid        int64  `json:"aid"`
+		ArgueMsg   string `json:"argue_msg"`
+		Bvid       string `json:"bvid"`
+		Coin       int64  `json:"coin"`
+		Copyright  int64  `json:"copyright"`
+		Danmaku    int64  `json:"danmaku"`
+		Evaluation string `json:"evaluation"`
+		Favorite   int64  `json:"favorite"`
+		HisRank    int64  `json:"his_rank"`
+		Like       int64  `json:"like"`
+		NoReprint  int64  `json:"no_reprint"`
+		NowRank    int64  `json:"now_rank"`
+		Reply      int64  `json:"reply"`
+		Share      int64  `json:"share"`
+		View       int64  `json:"view"`
+	} `json:"data"`
+	Message string `json:"message"`
+	TTL     int64  `json:"ttl"`
+}
+
+// Bv2avByAPI `bvid` 转为 `avid`
+// (不推荐使用该方法, 因为不知道官方的这个接口何时挂掉..)
+func Bv2avByAPI(bvid string) string {
+	var api = fmt.Sprintf("https://api.bilibili.com/x/web-interface/archive/stat?bvid=%v", bvid)
+	resp, err := http.Get(api)
+	if err != nil {
+		return ""
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	var respBody BilibiliJSON
+	json.Unmarshal(body, &respBody)
+	if respBody.Code != 0 {
+		return ""
+	}
+	id := respBody.Data.Aid
+	var r = fmt.Sprintf("av%v", id)
+	return r
+}
 
 // Bv2av `bvid` 转为 `avid`
 func Bv2av(bvid string) string {

@@ -11,7 +11,9 @@ func main() {
 	var avid = "av15121849"
 	var _avid = b23utils.Bv2av(bvid)
 	var _bvid = b23utils.Av2bv(avid)
+	var _networdAvid = b23utils.Bv2avByAPI(bvid)
 	var fullURL = b23utils.FullURL(_bvid)
+	fmt.Println(_networdAvid)
 	fmt.Println(fullURL)
 	fmt.Println(_avid)
 	fmt.Println(_bvid)

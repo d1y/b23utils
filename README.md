@@ -10,6 +10,8 @@ go get -u github.com/d1y/b23utils
 
 # func
 
+- `func Bv2avByAPI(str) str {}` 将 `bvid` 转为 `avid`, 通过 `bilibili` 官方 `api`, 不推荐使用
+
 - `func Bv2av(str) str {}` 将 `bvid` 转为 `avid`
 
 - `func Av2bv(str) str {}` 将 `avid` 转为 `bvid`
